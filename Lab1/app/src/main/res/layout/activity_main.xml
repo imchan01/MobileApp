@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:weight="1">
+
+        <ImageView
+            android:id="@+id/imageAndroid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/download"></ImageView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:layout_weight="1"
+        android:background="@color/teal_200"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/new_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:layout_marginTop="10px"
+            android:lines="1"
+            android:text="New Game">
+
+        </Button>
+
+        <Button
+            android:id="@+id/continue_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="3px"
+            android:lines="1"
+            android:text="Continue Game"></Button>
+
+        <Button
+            android:id="@+id/help_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="3px"
+            android:lines="1"
+            android:text="Help Game"></Button>
+
+        <Button
+            android:id="@+id/quick_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="2px"
+            android:lines="1"
+            android:text="Quick Game">
+
+        </Button>
+
+    </LinearLayout>
+
+
+</LinearLayout>
