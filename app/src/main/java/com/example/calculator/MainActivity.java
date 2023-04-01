@@ -3,14 +3,19 @@ package com.example.calculator;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.gson.Gson;
+
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -20,6 +25,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     MaterialButton buttonDivide,buttonMultiply,buttonPlus,buttonMinus,buttonEquals;
     MaterialButton button0,button1,button2,button3,button4,button5,button6,button7,button8,button9;
     MaterialButton buttonAC,buttonDot;
+
+    SharedPreferences sharedPreferences;
+    String fileSave = "com.example.calculator";
 
     int hisCount = 0 ;
 
@@ -51,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         assignId(buttonAC,R.id.button_ac);
         assignId(buttonDot,R.id.button_dot);
 
+        sharedPreferences = getSharedPreferences(fileSave, MODE_PRIVATE);
+        //LAY DU LIEU
+        hisCount = sharedPreferences.getInt("History Count", 0);
 
 
 
@@ -61,8 +72,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btn = findViewById(id);
         btn.setOnClickListener(this);
     }
-
-
+    // ham up du lieu len
+    @Override
+    public void onPause(){
+        super.onPause();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("History Count", hisCount);
+        editor.apply();
+    }
     @Override
     public void onClick(View view) {
         MaterialButton button =(MaterialButton) view;
