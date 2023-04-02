@@ -11,10 +11,12 @@ import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Scriptable;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 
@@ -31,10 +33,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     int hisCount = 0 ;
 
+    ArrayList<String> arrayList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedPreferences = getSharedPreferences(fileSave, MODE_PRIVATE);
+        //LAY DU LIEU
+        hisCount = sharedPreferences.getInt("History Count", 0);
+
+        // chuyen hoa du lieu tu json sang arraylist, get chuoi json
+//        Gson gson = new Gson();
+//        String json = sharedPreferences.getString("Solution", "");
+        //ham chuyen tu json sang arraylist
+//        Type type = new TypeToken<ArrayList<String>>(){}.getType();
+//        arrayList = gson.fromJson(json, type); // json: chuoi json, type: kieu array string
         resultTv = findViewById(R.id.result_tv);
         solutionTv = findViewById(R.id.solution_tv);
 
@@ -59,12 +73,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         assignId(buttonAC,R.id.button_ac);
         assignId(buttonDot,R.id.button_dot);
 
-        sharedPreferences = getSharedPreferences(fileSave, MODE_PRIVATE);
-        //LAY DU LIEU
-        hisCount = sharedPreferences.getInt("History Count", 0);
-
-
-
 
     }
 
@@ -78,6 +86,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onPause();
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("History Count", hisCount);
+        //luu du lieu dang json
+//        Gson gson = new Gson();
+//        String json = gson.toJson(arrayList);
+//        editor.putString("Solution", json);
         editor.apply();
     }
     @Override
@@ -88,20 +100,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(buttonText.equals("AC")){
             solutionTv.setText("");
-            hisCount -=1;
+//            hisCount -=1;
 
             resultTv.setText("0");
-            return;
-        }
-        if(buttonText.equals("=")){
-            solutionTv.setText(resultTv.getText());
-            hisCount+=1;
             return;
         }
         if(buttonText.equals("C")){
             dataToCalculate = dataToCalculate.substring(0,dataToCalculate.length()-1);
         }else{
             dataToCalculate = dataToCalculate+buttonText;
+        }
+
+        if(buttonText.equals("=")){
+            solutionTv.setText(resultTv.getText());
+            hisCount+=1;
+            String store = dataToCalculate +  resultTv.getText();
+            arrayList.add(store);
+            return;
         }
         solutionTv.setText(dataToCalculate);
 
@@ -131,6 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void sendIntent(View view) {
         Intent intent = new Intent(this, second_activity2.class);
         intent.putExtra("Count Calculate", String.valueOf(hisCount));
+        intent.putExtra("History", arrayList);
         startActivity(intent);
     }
 }

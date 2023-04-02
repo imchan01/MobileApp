@@ -14,6 +14,8 @@ import java.util.ArrayList;
 
 public class second_activity2 extends AppCompatActivity {
 
+    String list[] = {"123", "listHistory"} ;
+    ListView listView ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,25 +23,16 @@ public class second_activity2 extends AppCompatActivity {
         Intent intent = getIntent();
         String hisCount = intent.getStringExtra("Count Calculate");
 
+        //get chuoi phep tinh
+        ArrayList<String> hisSolotion = (ArrayList<String>) intent.getSerializableExtra("History") ;
+
         TextView history = (TextView) findViewById(R.id.showCount);
         history.setText(  hisCount );
-    }
-    //cach 1
-//    public String ReadFile(String FileName){
-//        File path = getApplicationContext().getFilesDir();
-//        File ReadFrom = new File(path, FileName);
-//        byte[] content = new byte[(int ) ReadFrom.length()];
-//
-//        try {
-//            FileInputStream Stream = new FileInputStream(ReadFrom);
-//            Stream.read(content);
-//            return new String(content);
-//        }
-//        catch (Exception e){
-//            e.printStackTrace();
-//            return e.toString();
-//        }
 
-    //cach 2
+        //get tung phep tinh vo item
+        listView = (ListView) findViewById(R.id.listHistory);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.list_history, R.id.itemHistory, hisSolotion);
+        listView.setAdapter(arrayAdapter);
+    }
 
 }
