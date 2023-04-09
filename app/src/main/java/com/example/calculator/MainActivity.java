@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     int hisCount = 0 ;
 
-    ArrayList<String> arrayList = new ArrayList<>();
+    ArrayList<String> arrayList = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +43,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //LAY DU LIEU
         hisCount = sharedPreferences.getInt("History Count", 0);
 
+
         // chuyen hoa du lieu tu json sang arraylist, get chuoi json
-//        Gson gson = new Gson();
-//        String json = sharedPreferences.getString("Solution", "");
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("Solution", null);
         //ham chuyen tu json sang arraylist
-//        Type type = new TypeToken<ArrayList<String>>(){}.getType();
-//        arrayList = gson.fromJson(json, type); // json: chuoi json, type: kieu array string
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        arrayList = gson.fromJson(json, type); // json: chuoi json, type: kieu array string
+
         resultTv = findViewById(R.id.result_tv);
         solutionTv = findViewById(R.id.solution_tv);
 
@@ -87,9 +89,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt("History Count", hisCount);
         //luu du lieu dang json
-//        Gson gson = new Gson();
-//        String json = gson.toJson(arrayList);
-//        editor.putString("Solution", json);
+        Gson gson = new Gson();
+        String json = gson.toJson(arrayList);
+        editor.putString("Solution", json);
+
+        //gioi han 10 phan tu
+        if(arrayList.size() >=10){
+            arrayList.remove(0);
+        }
         editor.apply();
     }
     @Override
@@ -115,7 +122,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             solutionTv.setText(resultTv.getText());
             hisCount+=1;
             String store = dataToCalculate +  resultTv.getText();
+
+            if(arrayList == null){
+                arrayList = new ArrayList<>();
+            }
+
             arrayList.add(store);
+
             return;
         }
         solutionTv.setText(dataToCalculate);
