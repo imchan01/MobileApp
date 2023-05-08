@@ -2,24 +2,23 @@ package com.example.calculator;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.io.File;
-import java.io.FileInputStream;
+import com.example.calculator.model.CalculationAdapter;
+import com.example.calculator.model.CalculationClass;
+
 import java.util.ArrayList;
 
-public class second_activity2 extends AppCompatActivity {
+public class SecondActivity extends AppCompatActivity {
 
     String list[] = {"123", "listHistory"} ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.second_activity);
+        setContentView(R.layout.activity_second);
         Intent intent = getIntent();
         String hisCount = intent.getStringExtra("Count Calculate");
         TextView history = (TextView) findViewById(R.id.showCount);
@@ -27,12 +26,12 @@ public class second_activity2 extends AppCompatActivity {
 
 //        String history_key = intent.getStringExtra("History");
 
-        //get chuoi phep tinh
-        ArrayList<String> hisSolution = (ArrayList<String>) getIntent().getSerializableExtra("History") ;
+        //get array list object
+        ArrayList<CalculationClass> hisCalculation = getIntent().getParcelableArrayListExtra("History");
+        CalculationAdapter solutionAdapter = new CalculationAdapter(this, hisCalculation);
 
-        //get tung phep tinh vo item
+        //get calculation into list view
         ListView listView = (ListView) findViewById(R.id.listHistory);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,R.layout.list_history, R.id.itemHistory, hisSolution);
-        listView.setAdapter(arrayAdapter);
+        listView.setAdapter(solutionAdapter);
     }
 }

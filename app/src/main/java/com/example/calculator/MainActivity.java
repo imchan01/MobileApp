@@ -1,14 +1,16 @@
 package com.example.calculator;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import org.apache.commons.lang3.SerializationUtils;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Display;
+import android.util.Base64;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.calculator.model.CalculationClass;
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -33,23 +35,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     int hisCount = 0 ;
 
-    ArrayList<String> arrayList = null;
-
+//    ArrayList<String> arrayList = null;
+    ArrayList<CalculationClass> arrayList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sharedPreferences = getSharedPreferences(fileSave, MODE_PRIVATE);
-        //LAY DU LIEU
         hisCount = sharedPreferences.getInt("History Count", 0);
+        loadData();
 
-
-        // chuyen hoa du lieu tu json sang arraylist, get chuoi json
         Gson gson = new Gson();
-        String json = sharedPreferences.getString("Solution", null);
-        //ham chuyen tu json sang arraylist
-        Type type = new TypeToken<ArrayList<String>>() {}.getType();
-        arrayList = gson.fromJson(json, type); // json: chuoi json, type: kieu array string
+        String json=sharedPreferences.getString("History Show",null);
+        Type type = new TypeToken<ArrayList<CalculationClass>>(){}.getType();
+        arrayList = gson.fromJson(json,type);
+        if (arrayList==null){
+            arrayList=new ArrayList<>();
+        }
 
         resultTv = findViewById(R.id.result_tv);
         solutionTv = findViewById(R.id.solution_tv);
@@ -78,27 +80,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void loadData() {
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("DATA", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("CALCULATION DATA", null);
+        Type type = new TypeToken<ArrayList<CalculationClass>>(){}.getType();
+        arrayList = gson.fromJson(json,type);
+
+        if(arrayList.size() >10)
+        {
+            arrayList.remove(0);
+        }
+    }
     void assignId(MaterialButton btn,int id){
         btn = findViewById(id);
         btn.setOnClickListener(this);
     }
-    // ham up du lieu len
-    @Override
-    public void onPause(){
-        super.onPause();
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("History Count", hisCount);
-        //luu du lieu dang json
-        Gson gson = new Gson();
-        String json = gson.toJson(arrayList);
-        editor.putString("Solution", json);
 
-        //gioi han 10 phan tu
-        if(arrayList.size() >=10){
-            arrayList.remove(0);
-        }
-        editor.apply();
-    }
     @Override
     public void onClick(View view) {
         MaterialButton button =(MaterialButton) view;
@@ -122,13 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             solutionTv.setText(resultTv.getText());
             hisCount+=1;
             String store = dataToCalculate +  resultTv.getText();
-
-            if(arrayList == null){
-                arrayList = new ArrayList<>();
-            }
-
-            arrayList.add(store);
-
+            saveData(dataToCalculate ,resultTv.getText().toString());
             return;
         }
         solutionTv.setText(dataToCalculate);
@@ -138,9 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(!finalResult.equals("Err")){
             resultTv.setText(finalResult);
         }
-
     }
-
     String getResult(String data){
         try{
             Context context  = Context.enter();
@@ -156,10 +146,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
+    private void saveData(String solution, String result) {
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("DATA", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+
+
+        arrayList.add(new CalculationClass(solution, result));
+        String json = gson.toJson(arrayList);
+        editor.putString("CALCULATION DATA", json);
+        editor.apply();
+        loadData();
+        notification();
+    }
+
+
     public void sendIntent(View view) {
-        Intent intent = new Intent(this, second_activity2.class);
+        Intent intent = new Intent(this, SecondActivity.class);
         intent.putExtra("Count Calculate", String.valueOf(hisCount));
-        intent.putExtra("History", arrayList);
+        intent.putParcelableArrayListExtra("History", arrayList);
+
         startActivity(intent);
+    }
+    //create toast notification
+    public void notification(){
+        android.content.Context context = getApplicationContext();
+        CharSequence text = "Save successful!";
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
     }
 }

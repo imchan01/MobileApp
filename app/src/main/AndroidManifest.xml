@@ -12,7 +12,7 @@
         android:theme="@style/Theme.Calculator"
         tools:targetApi="31">
         <activity
-            android:name=".second_activity2"
+            android:name=".SecondActivity"
              />
         <activity
             android:name=".MainActivity"
