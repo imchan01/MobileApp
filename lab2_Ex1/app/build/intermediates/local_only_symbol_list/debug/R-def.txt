@@ -1,0 +1,36 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color purple_200
+color purple_500
+color purple_700
+color teal_200
+color teal_700
+color white
+drawable e3ca2c6d2da0f97fed0c532f62e8e3f6
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+id img
+id menu_ct_delete
+id menu_ct_edit
+id menu_ct_send
+id menu_of_Edit
+id menu_of_View
+id menu_of_file
+id menu_of_tool
+id menu_sm_exit
+id menu_sm_file
+id menu_sm_load
+id menu_sm_new
+id menu_sm_save
+id menu_sm_view
+layout activity_main
+menu context_menu
+menu option_menu
+menu submenu
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+style Theme.Lab2_Ex1
+xml backup_rules
+xml data_extraction_rules

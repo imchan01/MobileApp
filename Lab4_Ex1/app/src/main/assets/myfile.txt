@@ -1,0 +1,5 @@
+bộ dữ liệu không tuân theo 1 nguyên tắc ⇒ model là quá trình đi tìm công thức của bộ dữ liệu ⇒ ứng với công thức đó có các tham số 
+
+model của neural network: bao gồm các cấu trúc network tồn tại trong nó và bộ tham số, bộ tham số chỉ xaficho 1 cấu trúc network nào đó thôi 
+
+quá trình điều chỉnh sai số là quá trình điều chỉnh model
